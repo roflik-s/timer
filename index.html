@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Таймер обратного отсчёта до важного события">
+  <title>Таймер до важного события</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="page-bg" aria-hidden="true"></div>
+
+  <header class="header">
+    <div class="container header__inner">
+      <div class="logo">
+        <span class="logo__icon" aria-hidden="true">⏳</span>
+        <h1 class="logo__title">Таймер до события</h1>
+      </div>
+      <p class="header__subtitle">Узнай, сколько осталось до самого важного дня</p>
+    </div>
+  </header>
+
+  <main class="main container">
+    <!-- Блок выбора события -->
+    <section class="card card--setup" aria-labelledby="setup-title">
+      <h2 id="setup-title" class="card__title">Выбери событие</h2>
+
+      <form id="event-form" class="event-form" novalidate>
+        <div class="event-options" role="radiogroup" aria-label="Тип события">
+          <label class="event-option">
+            <input type="radio" name="event-type" value="birthday">
+            <span class="event-option__box">
+              <span class="event-option__emoji">🎂</span>
+              <span class="event-option__label">День рождения</span>
+            </span>
+          </label>
+          <label class="event-option">
+            <input type="radio" name="event-type" value="vacation">
+            <span class="event-option__box">
+              <span class="event-option__emoji">🏖️</span>
+              <span class="event-option__label">Каникулы</span>
+            </span>
+          </label>
+          <label class="event-option">
+            <input type="radio" name="event-type" value="newyear">
+            <span class="event-option__box">
+              <span class="event-option__emoji">🎄</span>
+              <span class="event-option__label">Новый год</span>
+            </span>
+          </label>
+          <label class="event-option">
+            <input type="radio" name="event-type" value="christmas">
+            <span class="event-option__box">
+              <span class="event-option__emoji">🎅</span>
+              <span class="event-option__label">Рождество</span>
+            </span>
+          </label>
+          <label class="event-option">
+            <input type="radio" name="event-type" value="valentine">
+            <span class="event-option__box">
+              <span class="event-option__emoji">💌</span>
+              <span class="event-option__label">14 февраля</span>
+            </span>
+          </label>
+          <label class="event-option">
+            <input type="radio" name="event-type" value="march8">
+            <span class="event-option__box">
+              <span class="event-option__emoji">🌷</span>
+              <span class="event-option__label">8 марта</span>
+            </span>
+          </label>
+          <label class="event-option">
+            <input type="radio" name="event-type" value="may9">
+            <span class="event-option__box">
+              <span class="event-option__emoji">🎖️</span>
+              <span class="event-option__label">9 мая</span>
+            </span>
+          </label>
+          <label class="event-option">
+            <input type="radio" name="event-type" value="school">
+            <span class="event-option__box">
+              <span class="event-option__emoji">📚</span>
+              <span class="event-option__label">1 сентября</span>
+            </span>
+          </label>
+          <label class="event-option">
+            <input type="radio" name="event-type" value="halloween">
+            <span class="event-option__box">
+              <span class="event-option__emoji">🎃</span>
+              <span class="event-option__label">Хэллоуин</span>
+            </span>
+          </label>
+          <label class="event-option">
+            <input type="radio" name="event-type" value="custom">
+            <span class="event-option__box">
+              <span class="event-option__emoji">✨</span>
+              <span class="event-option__label">Своё событие</span>
+            </span>
+          </label>
+        </div>
+
+        <div id="custom-fields" class="custom-fields" hidden>
+          <label class="field">
+            <span class="field__label">Название события</span>
+            <input type="text" id="custom-name" class="field__input" maxlength="80"
+              placeholder="Например: Выпускной" autocomplete="off">
+          </label>
+          <label class="field">
+            <span class="field__label">Дата события</span>
+            <input type="date" id="custom-date" class="field__input">
+          </label>
+        </div>
+
+        <div id="birthday-field" class="custom-fields" hidden>
+          <label class="field">
+            <span class="field__label">Дата дня рождения</span>
+            <input type="date" id="birthday-date" class="field__input">
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn--primary">
+          <span class="btn__text">Добавить событие</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- Блок таймера -->
+    <section class="card card--timer" aria-labelledby="timer-title">
+      <div class="event-info">
+        <h2 id="timer-title" class="event-info__name">Выбери событие выше</h2>
+        <p class="event-info__date">
+          <span class="event-info__label">Дата:</span>
+          <time id="event-date-display">—</time>
+        </p>
+      </div>
+
+      <p id="past-message" class="past-message" hidden role="status">
+        🎉 Событие уже наступило!
+      </p>
+
+      <div id="countdown" class="countdown" aria-live="polite">
+        <div class="countdown__unit">
+          <span id="days" class="countdown__value">00</span>
+          <span class="countdown__label">дней</span>
+        </div>
+        <div class="countdown__unit">
+          <span id="hours" class="countdown__value">00</span>
+          <span class="countdown__label">часов</span>
+        </div>
+        <div class="countdown__unit">
+          <span id="minutes" class="countdown__value">00</span>
+          <span class="countdown__label">минут</span>
+        </div>
+        <div class="countdown__unit">
+          <span id="seconds" class="countdown__value">00</span>
+          <span class="countdown__label">секунд</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Список событий -->
+    <section class="card card--list" aria-labelledby="list-title">
+      <div class="list-header">
+        <h2 id="list-title" class="card__title">Мои события</h2>
+        <button id="clear-events" class="btn btn--ghost" type="button">Очистить список</button>
+      </div>
+      <p id="events-empty" class="muted" hidden>Пока событий нет. Добавь первое событие выше.</p>
+      <div id="events-list" class="events-list" aria-live="polite"></div>
+    </section>
+
+    <!-- Дополнительные блоки -->
+    <div class="extras">
+      <section class="card card--image" aria-labelledby="image-title">
+        <h2 id="image-title" class="card__title card__title--small">Картинка дня</h2>
+        <figure class="day-image">
+          <div id="day-image-visual" class="day-image__visual" role="img" aria-label="Тематическая иллюстрация"></div>
+          <figcaption id="day-image-caption" class="day-image__caption">Загрузка…</figcaption>
+        </figure>
+      </section>
+
+      <section class="card card--fact" aria-labelledby="fact-title">
+        <h2 id="fact-title" class="card__title card__title--small">Факт дня</h2>
+        <p id="fact-text" class="fact-text">Загрузка факта…</p>
+      </section>
+
+      <section class="card card--quote" aria-labelledby="quote-title">
+        <h2 id="quote-title" class="card__title card__title--small">Фраза дня</h2>
+        <blockquote class="quote">
+          <p id="quote-text" class="quote__text">Загрузка цитаты…</p>
+          <footer id="quote-author" class="quote__author"></footer>
+        </blockquote>
+      </section>
+    </div>
+
+    <!-- Мини-игра -->
+    <section class="card card--game" aria-labelledby="game-title">
+      <div class="game-header">
+        <div>
+          <h2 id="game-title" class="card__title">Мини-игра: Динозаврик</h2>
+          <p class="muted game-hint">Управление: пробел / ↑ / клик / тап. Цель — перепрыгивать кактусы.</p>
+        </div>
+        <div class="game-stats" aria-label="Статистика игры">
+          <div class="game-stat"><span class="muted">Счёт</span> <strong id="game-score">0</strong></div>
+          <div class="game-stat"><span class="muted">Рекорд</span> <strong id="game-best">0</strong></div>
+        </div>
+      </div>
+
+      <div class="game-wrap">
+        <canvas id="dino-canvas" class="game-canvas" width="800" height="240" aria-label="Игра динозаврик" role="img"></canvas>
+        <div class="game-controls">
+          <button id="game-start" class="btn btn--primary" type="button">Старт</button>
+          <button id="game-jump" class="btn btn--ghost" type="button">Прыжок</button>
+          <button id="game-restart" class="btn btn--ghost" type="button" hidden>Заново</button>
+        </div>
+        <p id="game-status" class="game-status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div class="site-footer__brand">
+        <div class="site-footer__logo" aria-hidden="true">⏳</div>
+        <div class="site-footer__meta">
+          <div class="site-footer__title">Таймер до события</div>
+          <div class="site-footer__subtitle">Школьный проект на HTML, CSS и JavaScript</div>
+        </div>
+      </div>
+
+      <div class="site-footer__info">
+        <div class="site-footer__row">
+          <span class="site-footer__label">Имя ученика</span>
+          <span class="site-footer__value">Иван</span>
+        </div>
+        <div class="site-footer__row">
+          <span class="site-footer__label">©</span>
+          <span class="site-footer__value">
+            <span class="site-footer__name">Таймер до события</span>,
+            <span id="current-year">2026</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Сначала данные, затем логика приложения -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
